@@ -8,8 +8,8 @@
     "test:ui": "npx playwright test --ui",
     "debug": "npx playwright test --debug",
     "list": "npx playwright test --list",
-    "test:qa": "set TEST_ENV='QA' && npx playwright test --list" ,
-    "test:stage": "set TEST_ENV='STAGE' && npx playwright test --list" 
+    "test:qa": "set TEST_ENV='QA' && npx playwright test --ui",
+    "test:stage": "set TEST_ENV='STAGE' && npx playwright test --list"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,9 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.59.1",
-    "@types/node": "^25.6.0"
+    "@testomatio/reporter": "^2.8.1",
+    "@types/node": "^25.6.0",
+    "allure-playwright": "^3.9.0"
   },
   "dependencies": {
     "dotenv": "^17.4.2"

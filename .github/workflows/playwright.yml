@@ -1,4 +1,4 @@
-name: Playwright Tests in Docker
+name: Playwright Tests with Custom Dockerfile
 
 on:
   push:
@@ -8,12 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  playwright-tests:
+  playwright-docker:
     runs-on: ubuntu-latest
-
-    container:
-      image: mcr.microsoft.com/playwright:v1.59.1-noble
-      options: --init --ipc=host
 
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
@@ -26,11 +22,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install project dependencies
-        run: npm ci
+      - name: Build Docker image
+        run: docker build -t my2-playwright-tests .
 
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Run Playwright tests in Docker
+        run: |
+          docker run --rm --init --ipc=host \
+            -e BASE_URL="${BASE_URL}" \
+            -e USER_EMAIL="${USER_EMAIL}" \
+            -e USER_PASSWORD="${USER_PASSWORD}" \
+            -e HTTP_USERNAME="${HTTP_USERNAME}" \
+            -e HTTP_PASSWORD="${HTTP_PASSWORD}" \
+            -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
+            my2-playwright-tests
 
       - name: Upload Playwright HTML report
         if: always()

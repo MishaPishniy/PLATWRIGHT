@@ -8,4 +8,4 @@ RUN npm ci
 
 COPY . .
 
-CMD ["npx", "playwright", "test"]
+CMD ["npx", "playwright", "test", "--reporter=html"]

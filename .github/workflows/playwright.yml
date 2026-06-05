@@ -38,3 +38,5 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          if-no-files-found: error
+          retention-days: 7

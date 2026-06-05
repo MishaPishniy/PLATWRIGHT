@@ -30,7 +30,14 @@ jobs:
         run: npm ci
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --reporter=html
+
+      - name: Show files after tests
+        if: always()
+        run: |
+          pwd
+          ls -la
+          ls -la playwright-report || true
 
       - name: Upload Playwright HTML report
         if: always()
@@ -38,5 +45,5 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 7

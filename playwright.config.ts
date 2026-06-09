@@ -4,39 +4,28 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
+  testDir: './tests',
+
+  retries: process.env.CI ? 1 : 0,
+
+  workers: process.env.CI ? 1 : undefined,
+
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+  ],
+
   use: {
-    baseURL: process.env.BASE_URL || 'https://qauto.forstudy.space',
+    baseURL: process.env.BASE_URL,
+
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
 
     httpCredentials: {
-      username: process.env.HTTP_USERNAME || 'guest',
-      password: process.env.HTTP_PASSWORD || 'welcome2qauto',
+      username: process.env.HTTP_USERNAME || '',
+      password: process.env.HTTP_PASSWORD || '',
     },
   },
-   reporter: [
-    ['html', { outputFolder: 'playwright-report', open: 'never' }]
-  ],
-
-  projects: [
-    {
-      name: 'setup',
-      testDir: './tests',
-      testMatch: '**/auth.setup.ts',
-    },
-
-    {
-      name: 'api',
-      testDir: './tests/api',
-      testMatch: '**/*.spec.ts',
-    },
-
-    {
-      name: 'api2',
-      testDir: './tests/api2',
-      testMatch: '**/*.spec.ts',
-      dependencies: ['setup'],
-      use: {
-        storageState: '.auth/api-user.json',
-      },
-    },
-  ],
 });

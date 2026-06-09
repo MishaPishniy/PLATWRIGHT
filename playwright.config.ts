@@ -12,6 +12,9 @@ export default defineConfig({
       password: process.env.HTTP_PASSWORD || 'welcome2qauto',
     },
   },
+   reporter: [
+    ['html', { outputFolder: 'playwright-report', open: 'never' }]
+  ],
 
   projects: [
     {
